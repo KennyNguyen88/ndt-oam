@@ -211,6 +211,7 @@ if( ! class_exists( 'AC_Section_Masonry_1' ) ) {
                         <option value="featured"<?php selected( $instance['typeselect'], 'featured' ); ?>><?php _e( 'Featured posts', 'justwrite' ); ?></option>
                         <option value="posts"<?php selected( $instance['typeselect'], 'posts' ); ?>><?php _e( 'Latest posts', 'justwrite' ); ?></option>
                         <option value="category"<?php selected( $instance['typeselect'], 'category' ); ?>><?php _e( 'Category posts', 'justwrite' ); ?></option>
+
                     </select>
                 </p>
                 <p class="ac-display-category-field" style="display: none;">
