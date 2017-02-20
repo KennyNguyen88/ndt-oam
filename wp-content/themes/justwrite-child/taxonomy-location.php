@@ -22,8 +22,15 @@
                     <h1 class="page-title">
                         <?php
                             //_e( 'Gym Centers Archives: ', 'justwrite' );
+                        $term = get_term(get_queried_object()->term_id, 'location');
+                        $termParent1 = ($term->parent == 0) ? null : get_term($term->parent, 'location');
+                        $termParent2 = ($termParent1->parent == 0) ? null : get_term($termParent1->parent, 'location');
+
                         ?>
-                    <span><?php single_term_title(); ?></span> <?php ac_icon( 'angle-down' ); ?>
+                    <span><?php //single_term_title();
+                        if (!is_null($termParent2)) { echo $termParent2->name.' > ';}
+                        if (!is_null($termParent1)) { echo $termParent1->name.' > ';}
+                        echo $term->name  ?></span>
                     </h1>
                 </header>
 

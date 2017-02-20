@@ -4,10 +4,57 @@
  Description:  JustWrite Child Theme
  Author:       Kenny Nguyen
  Author URI:   http://pnpteam.net
- Template:     JustWrite
+ Template:     justwrite
  Version:      1.0.0
  License:      GNU General Public License v2 or later
  License URI:  http://www.gnu.org/licenses/gpl-2.0.html
  Tags: two-columns, three-columns, left-sidebar, right-sidebar, custom-logo, editor-style, featured-images, footer-widgets, full-width-template, sticky-post, threaded-comments, theme-options, translation-ready, news, blog, entertainment, post-formats, custom-menu
  Text Domain:  justwrite-child
 */
+
+.widget_nav_menu{
+    margin-top: -1px;
+    margin-bottom: 0px !important;
+}
+.widget_nav_menu .sb-content:hover{
+    cursor: pointer;
+}
+.widget_nav_menu .sb-content .sidebar-heading{
+    margin-bottom: 0px !important;
+    border-bottom-width: 4px !important;
+    border-bottom-style: double !important;
+}
+.widget_nav_menu .sb-content .sidebar-heading:before{
+    border-bottom-width: 4px !important;
+    border-bottom-style: double !important;
+}
+.widget_nav_menu .sb-content ul li:first-child{
+    margin-top: 15px;
+}
+.widget_nav_menu .sb-content ul li a:before{
+    content: "\f041";
+    text-align: center;
+    position: relative;
+    width: 45px;
+    /*height: 100%;*/
+    display: inline-block;
+    font: normal normal normal 20px FontAwesome;
+    /*font-size: inherit;*/
+    /*text-rendering: auto;*/
+    /*-webkit-font-smoothing: antialiased;*/
+}
+.hidden{
+    display: none;
+}
+
+#contact-info i{
+    color: #99cb5f;
+}
+
+.st-wrapped.st-small{
+    padding: 0px;
+}
+
+.container.builder.footer-widgets{
+    border-bottom: 0px;
+}

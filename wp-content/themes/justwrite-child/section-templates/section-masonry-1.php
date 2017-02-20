@@ -46,7 +46,6 @@ if ( ! empty( $section_title ) ) { ?>
             $query_args = array(
                 'posts_per_page'		=> absint( $section_postsnr ),
 				'post_status'         	=> 'publish',
-//                'cat'					=> absint( $section_category ),
                 'tax_query' => array(
                     array(
                         'taxonomy' => 'location',
@@ -54,8 +53,6 @@ if ( ! empty( $section_title ) ) { ?>
                         'field' => 'slug',
                         'include_children' => true
                     ),
-
-
                 ),
                 'post_type' => 'gym_center',
                 'ignore_sticky_posts'	=> 1
@@ -99,6 +96,7 @@ if ( ! empty( $section_title ) ) { ?>
             </aside>
             <?php } ?>
             <?php the_title( '<h4 class="section-title st-small-2nd st-bold"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h4>' ); ?>
+
         </div>
     </div><!-- END .threecol -->
     <?php endwhile;  else : // No posts ?>

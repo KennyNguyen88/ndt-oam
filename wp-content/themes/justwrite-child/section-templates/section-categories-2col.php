@@ -117,6 +117,33 @@ if ( ! empty( $section_title ) ) { ?>
 		<ul class="sc-posts alignright">
 			<li class="sc-first-post">
 				<?php the_title( '<h4 class="section-title st-small-2nd st-bold"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h4>' ); ?>
+
+                <?php
+                $street = get_post_meta( get_the_ID(), 'aom_street_address_gym_center', true );
+                $land = get_post_meta( get_the_ID(), 'aom_land_line_gym_center', true );
+                $mobile = get_post_meta( get_the_ID(), 'aom_mobile_gym_center', true );
+                if (!empty($street))
+                {
+                    ?>
+                    <div class="clearfix section-title st-small-2nd st-bold">
+                        <i class="fa fa-map-marker"></i> <?php echo $street; ?>
+                    </div>
+                    <?php
+                }
+                if (!empty($land) || !empty($mobile))
+                {
+                    ?>
+                    <div class="clearfix section-title st-small-2nd st-bold">
+                        <?php if (!empty($land)) { ?> <i class="fa fa-phone"></i> <?php } echo $land;?>
+                        <?php if (!empty($land) && !empty($mobile)) { echo " - " ; }?>
+                        <?php if (!empty($mobile)) { ?> <i class="fa fa-mobile"></i> <?php } echo $mobile;?>
+
+                    </div>
+                    <?php
+                }
+
+                ?>
+
 				<?php if( $sdt || $scm ) { ?>
 				<div class="sc-details">
 					<?php if( $sdt ) { ?><time class="s-sd" datetime="<?php echo get_the_date( 'Y-m-d' ); ?>"><?php echo get_the_date( 'M d, Y' ); ?></time><?php } ?>

@@ -46,6 +46,30 @@ $classes = join(' ', $classes);
     <?php endif; ?>
 	<div class="post-content">
     	<?php the_title( '<h2 class="title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
+        <?php
+        $street = get_post_meta( get_the_ID(), 'aom_street_address_gym_center', true );
+        $land = get_post_meta( get_the_ID(), 'aom_land_line_gym_center', true );
+        $mobile = get_post_meta( get_the_ID(), 'aom_mobile_gym_center', true );
+        if (!empty($street))
+        {
+            ?>
+            <p class="clearfix">
+                <i class="fa fa-map-marker"></i> <?php echo $street; ?>
+            </p>
+            <?php
+        }
+        if (!empty($land) || !empty($mobile))
+        {
+            ?>
+            <p class="clearfix">
+                <?php if (!empty($land)) { ?> <i class="fa fa-phone"></i> <?php } echo $land;?>
+                <?php if (!empty($land) && !empty($mobile)) { echo " - " ; }?>
+                <?php if (!empty($mobile)) { ?> <i class="fa fa-mobile"></i> <?php } echo $mobile;?>
+
+            </p>
+            <?php
+        }
+        ?>
 		<?php the_excerpt(); ?>
         <footer class="details">
         	<span class="post-small-button left p-read-more" id="share-<?php the_ID(); ?>-rm">
@@ -53,8 +77,8 @@ $classes = join(' ', $classes);
 			</span>
             <?php do_action( 'ac_action_content_read_more_after' ); // After "Read More" button action ?>
             <time class="detail left index-post-date" datetime="<?php echo get_the_date( 'Y-m-d' ); ?>"><?php echo get_the_date( 'M d, Y' ); ?></time>
-			<span class="detail left index-post-author"><em><?php _e( 'by', 'justwrite' ); ?></em> <?php the_author_posts_link(); ?></span>
-			<?php if( ! is_category() ) { ?><span class="detail left index-post-category"><em><?php _e( 'in', 'justwrite' ); ?></em> <?php ac_output_first_category(); ?></span><?php } ?>
+
+
 		</footer><!-- END .details -->
 	</div><!-- END .post-content -->
 </article><!-- END #post-<?php the_ID(); ?> .post-template-1 -->

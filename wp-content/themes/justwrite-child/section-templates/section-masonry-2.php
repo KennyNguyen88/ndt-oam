@@ -45,7 +45,6 @@ if ( ! empty( $section_title ) ) { ?>
             $query_args = array(
                 'posts_per_page'		=> 5,
 				'post_status'         	=> 'publish',
-//                'cat'					=> absint( $section_category ),
                 'tax_query' => array(
                         array(
                             'taxonomy' => 'location',
@@ -53,8 +52,6 @@ if ( ! empty( $section_title ) ) { ?>
                             'field' => 'slug',
                             'include_children' => true
                         ),
-
-
                 ),
                 'post_type' => 'gym_center',
                 'ignore_sticky_posts'	=> 1
@@ -99,6 +96,16 @@ if ( ! empty( $section_title ) ) { ?>
                     </aside>
                     <?php } ?>
                      <?php the_title( '<h3 class="section-title st-wrapped st-large st-bold"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' ); ?>
+                    <?php $street = get_post_meta( get_the_ID(), 'aom_street_address_gym_center', true );
+                    if (!empty($street))
+                    {
+                        ?>
+                        <p class="clearfix section-title st-wrapped st-large st-bold" style="margin-top: 5px">
+                            <?php echo $street; ?>
+                        </p>
+                        <?php
+                    }
+                    ?>
                 </div>
             </figcaption>
         </figure>
@@ -128,6 +135,17 @@ if ( ! empty( $section_title ) ) { ?>
                     </aside>
                     <?php } ?>
                     <?php the_title( '<h4 class="section-title st-wrapped st-small st-bold"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h4>' ); ?>
+
+                    <?php $street = get_post_meta( get_the_ID(), 'aom_street_address_gym_center', true );
+                    if (!empty($street))
+                    {
+                        ?>
+                        <p class="clearfix section-title st-wrapped st-small st-bold">
+                            <?php echo $street; ?>
+                        </p>
+                        <?php
+                    }
+                    ?>
                 </div>
             </figcaption>
         </figure>

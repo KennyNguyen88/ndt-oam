@@ -19,7 +19,31 @@ function my_theme_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 
+/*  Load JavaScript files
+/* ------------------------------------ */
+if ( ! function_exists( 'ac_js_files' ) ) {
 
+    function ac_js_files() {
+
+        // Enqueue
+        wp_enqueue_script( 'ac_js_fitvids', get_template_directory_uri() . '/assets/js/jquery.fitvids.js', array('jquery'), '1.1', true );
+        wp_enqueue_script( 'ac_js_menudropdown', get_template_directory_uri() . '/assets/js/menu-dropdown.js', array('jquery'), '1.4.8', true );
+
+        if( is_home() && get_theme_mod( 'ac_enable_slider', false ) ) {
+            wp_enqueue_script( 'ac_js_slider', get_template_directory_uri() . '/assets/js/slider.js', array('jquery'), '0.3.0', true );
+        }
+
+        wp_enqueue_script( 'ac_js_myscripts', get_template_directory_uri() . '/assets/js/myscripts.js', array('jquery'), '1.0.6', true );
+        wp_enqueue_script( 'ac_js_html5', get_template_directory_uri() . '/assets/js/html5.js', array('jquery'), '3.7.0', false );
+
+        // Comments Script
+        if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) { wp_enqueue_script( 'comment-reply' ); }
+
+        wp_enqueue_script( 'aom_site', get_stylesheet_directory_uri() . '/site.js', array('jquery'), '3.7.0', false );
+    }
+
+}
+add_action( 'wp_enqueue_scripts', 'ac_js_files' );
 /*  Get featured gym center count
 /* ------------------------------------ */
 if ( ! function_exists( 'ac_featured_gym_centers_count' ) ) {
@@ -53,8 +77,8 @@ function cmb2_gym_center_metaboxes() {
      * Initiate the metabox
      */
     $cmb = new_cmb2_box( array(
-        'id'            => 'test_metabox',
-        'title'         => __( 'Test Metabox', 'cmb2' ),
+        'id'            => 'gym_center_metabox',
+        'title'         => __( 'Gym Center Metabox', 'cmb2' ),
         'object_types'  => array( 'gym_center', ), // Post type
         'context'       => 'normal',
         'priority'      => 'high',
@@ -65,9 +89,29 @@ function cmb2_gym_center_metaboxes() {
 
     $cmb->add_field( array(
         'name' => esc_html__( 'Featured Gym', 'cmb2' ),
-        'desc' => esc_html__( 'Make this become Featured Post', 'cmb2' ),
-//        'id'   => $prefix . 'checkbox',
+        'desc' => esc_html__( 'Make this become Featured', 'cmb2' ),
         'id' => 'ac_featured_article',
+        'type' => 'text',
+    ) );
+
+    $cmb->add_field( array(
+        'name' => esc_html__( 'Address', 'cmb2' ),
+        'desc' => esc_html__( 'Street Address', 'cmb2' ),
+        'id' => 'aom_street_address_gym_center',
+        'type' => 'text',
+    ) );
+
+    $cmb->add_field( array(
+        'name' => esc_html__( 'Land Line', 'cmb2' ),
+        'desc' => esc_html__( 'Land Line Number', 'cmb2' ),
+        'id' => 'aom_land_line_gym_center',
+        'type' => 'text',
+    ) );
+
+    $cmb->add_field( array(
+        'name' => esc_html__( 'Mobile', 'cmb2' ),
+        'desc' => esc_html__( 'Mobile Number', 'cmb2' ),
+        'id' => 'aom_mobile_gym_center',
         'type' => 'text',
     ) );
 
@@ -231,4 +275,92 @@ if ( ! function_exists( 'ac_sidebars_widgets' ) ) {
 
 }
 add_action( 'widgets_init', 'ac_sidebars_widgets' );
+
+/*  Single post details
+/* ------------------------------------ */
+if ( ! function_exists( 'ac_single_post_details' ) ) {
+
+    function ac_single_post_details() {
+        global $post;
+
+        $author_id = $post->post_author;
+        $author_info = get_userdata( $author_id );
+        $author_name = $author_info->display_name;
+        $author_url = get_author_posts_url( $author_id );
+        $author_output = '<a href="' . esc_url( $author_url ) . '">' . esc_html( $author_name ) . '</a>';
+
+        $show_date = apply_filters( 'ac_single_post_details_sd', true );
+        $show_author = apply_filters( 'ac_single_post_details_sa', true );
+        $show_category = apply_filters( 'ac_single_post_details_sc', true );
+
+        do_action( 'ac_single_post_details_before' );
+        ?>
+        <header class="details clearfix">
+            <?php do_action( 'ac_single_post_details_before_items' ); ?>
+            <?php if( $show_date = false ) { ?><time class="detail left index-post-date" datetime="<?php echo get_the_date( 'Y-m-d' ); ?>"><?php echo get_the_date( 'M d, Y' ); ?></time><?php }; ?>
+
+            <?php $street = get_post_meta( get_the_ID(), 'aom_street_address_gym_center', true );
+            if (!empty($street)){
+                ?>
+            <span class="detail left index-post-category"><em><?php echo $street; ?></em></span>
+            <?php
+            }
+            ?>
+            <?php do_action( 'ac_single_post_details_after_items' ); ?>
+        </header><!-- END .details -->
+        <?php
+        do_action( 'ac_single_post_details_after' );
+    }
+
+}
+
+/*  Pagination
+/* ------------------------------------ */
+if ( ! function_exists( 'ac_paginate' ) ) {
+
+    function ac_paginate() {
+        if ( $GLOBALS['wp_query']->max_num_pages < 2 ) {
+            return;
+        }
+
+        $paged        = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
+        $pagenum_link = html_entity_decode( get_pagenum_link() );
+        $query_args   = array();
+        $url_parts    = explode( '?', $pagenum_link );
+
+        if ( isset( $url_parts[1] ) ) {
+            wp_parse_str( $url_parts[1], $query_args );
+        }
+
+        $pagenum_link = remove_query_arg( array_keys( $query_args ), $pagenum_link );
+        $pagenum_link = trailingslashit( $pagenum_link ) . '%_%';
+
+        $format  = $GLOBALS['wp_rewrite']->using_index_permalinks() && ! strpos( $pagenum_link, 'index.php' ) ? 'index.php/' : '';
+        $format .= $GLOBALS['wp_rewrite']->using_permalinks() ? user_trailingslashit( 'page/%#%', 'paged' ) : '?paged=%#%';
+
+        $links   = paginate_links( array(
+            'base'     => $pagenum_link,
+            'format'   => $format,
+            'total'    => $GLOBALS['wp_query']->max_num_pages,
+            'current'  => $paged,
+            'mid_size' => 1,
+            'add_args' => array_map( 'urlencode', $query_args ),
+            'prev_text' => __( '&larr; Trước', 'justwrite' ),
+            'next_text' => __( 'Sau &rarr;', 'justwrite' ),
+        ) );
+
+        if ( $links ) :
+
+            ?>
+            <nav class="posts-pagination clearfix" role="navigation">
+                <div class="paging-wrap">
+                    <?php echo $links; ?>
+                </div><!-- END .paging-wrap -->
+            </nav><!-- .posts-pagination -->
+            <?php
+        endif;
+
+    }
+
+}
 ?>

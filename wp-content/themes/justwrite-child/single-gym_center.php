@@ -51,7 +51,7 @@ if ( false === $format ) {
                             do_action( 'ac_action_single_content_about_social' );
 
                             // Next - Previous Post
-                            ac_post_nav_arrows();
+                            //ac_post_nav_arrows();
                             ?>
 
                             <div class="clear-border"></div>
